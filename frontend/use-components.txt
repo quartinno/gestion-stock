@@ -1,0 +1,34 @@
+
+     
+      <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
+        <Button variant="primary" size="small" onClick={() => alert('Clicked!')}>
+          Small Primary
+        </Button>
+        <Button variant="secondary" size="medium">
+          Medium Secondary
+        </Button>
+        <Button variant="danger" size="large" disabled>
+          Large Disabled
+        </Button>
+      </div>
+      
+      
+      <Card
+        title="Sample Card"
+        footer={<Button variant="primary">Action</Button>}
+      >
+        This is the content of the card. You can put any JSX here.
+      </Card>
+
+
+
+      <Image
+        src="https://example.com/another-image.jpg" 
+        alt="Standalone Image"
+        size="large"
+        caption="Standalone image with caption"
+      />
+
+
+    </div>
+ 
