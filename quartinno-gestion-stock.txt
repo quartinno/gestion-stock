@@ -1,0 +1,366 @@
+Cahier des Charges: Stock Management Application
+1. Project Overview
+This document outlines the specifications for a web-based stock management application designed for supermarkets, drugstores, parapharmacies, and similar retail businesses. The application will manage products (with barcode scanning, expiration dates, and quantities), clients (with credit tracking), and invoicing. It will use React.js for the frontend and Laravel for the backend API. Additionally, it includes a subscription-based access system where an admin manages business subscriptions and grants login access to businesses based on their plans. The project must be completed in 4 weeks.
+
+2. Objectives
+
+Develop a web-based application to manage inventory, clients, and financial transactions.
+Enable barcode scanning for efficient product sales and inventory updates.
+Track product quantities and expiration dates to minimize waste.
+Manage client credits and generate invoices for sales.
+Implement a subscription system for businesses to access the application.
+Allow an admin to manage subscriptions and grant access to businesses.
+Ensure compatibility with supermarkets, drugstores, and parapharmacies.
+Deliver a scalable, secure, and user-friendly solution within a 4-week timeline.
+
+
+3. Functional Requirements
+3.1 Product Management
+
+Product Registration:
+Add, update, and delete products.
+Fields: Product ID, Name, Barcode (unique), Category (e.g., Food, Medicine, Cosmetics), Unit Price, Cost Price, Supplier, Description, Expiration Date, Quantity in Stock, Minimum Stock Threshold.
+Support bulk import via CSV files.
+
+
+Barcode Scanning for Product Creation/Updating:
+Scan barcodes (EAN-13, UPC-A) to auto-populate the Barcode field and optionally retrieve details (Name, Category) from an external API (e.g., Open Food Facts).
+Prompt for mandatory fields (Expiration Date, Quantity) after scanning.
+Handle errors: Duplicate barcode (“Product exists. Update?”), Invalid barcode (“Invalid format. Enter manually.”).
+
+
+Expiration Date Tracking:
+Track expiration dates for perishable products.
+Generate alerts for products nearing expiration (7 or 14 days, configurable).
+Provide a report for expired/soon-to-expire products.
+
+
+Stock Quantity Management:
+Track stock in real-time with automatic updates after sales/restocking.
+Set low-stock thresholds (e.g., <10 units) with alerts.
+Support manual stock adjustments (e.g., for damaged goods).
+
+
+Product Search:
+Search by Name, Barcode, or Category.
+Filter by stock status (in stock, low stock, out of stock).
+
+
+
+3.2 Client Management
+
+Client Registration:
+Add, update, and delete client profiles.
+Fields: Client ID, Name, Phone, Email, Address, Credit Limit, Credit Balance.
+Support bulk import via CSV.
+
+
+Client Credit Management:
+Track credit balances and enforce credit limits.
+Record repayments and generate repayment history.
+Notify for overdue payments (e.g., 7 days past due).
+
+
+Client Search:
+Search by Name, Client ID, or Contact Details.
+Filter by credit status (overdue, within limit).
+
+
+
+3.3 Barcode Scanning for Sales
+
+Purpose: Add products to sales transactions via barcode scanning.
+Functionality:
+Scan barcodes using a webcam/mobile camera to retrieve product details (Name, Price, Stock).
+Add scanned products to a sales transaction table.
+Deduct stock quantities upon sale confirmation.
+Handle errors: Product not found (“Add to inventory?”), Out of stock (“Current quantity: 0”).
+Support multiple scans per transaction and manual barcode entry as a fallback.
+
+
+User Interface:
+Display live camera feed in the POS interface.
+Show scanned products in a table (Name, Quantity, Price, Subtotal).
+Include options for discounts, payment methods, and sale confirmation.
+
+
+
+3.4 Invoicing (Facturation)
+
+Invoice Creation:
+Generate invoices with: Invoice Number, Date, Client Details, Product List, Total Amount, Taxes (configurable), Payment Method, Payment Status.
+Support cash, credit, and mobile payments.
+
+
+Invoice Management:
+View, edit, or cancel invoices (admin-only for cancellations).
+Export invoices as PDF.
+Mark invoices as paid/unpaid for credit sales.
+
+
+Invoice Search:
+Filter by Date, Client, Payment Status, or Invoice Number.
+
+
+Reports:
+Generate invoice summaries (daily, weekly, monthly).
+Export as PDF/CSV.
+
+
+
+3.5 Sales Management
+
+Point of Sale (POS):
+Process sales with barcode scanning or manual product selection.
+Apply discounts/promotions.
+Support payment methods (cash, credit, mobile).
+Generate receipts/invoices upon sale completion.
+
+
+Sales History:
+Store and retrieve sales records.
+Filter by Date, Client, Product, or Payment Method.
+Export as CSV.
+
+
+
+3.6 Subscription and Access Management
+
+Admin Subscription Management:
+Admin can create and manage subscription plans (e.g., Basic, Premium).
+Plan details: Plan ID, Name, Price, Duration (e.g., monthly, yearly), Features (e.g., max users, max products).
+Admin can assign plans to businesses and activate/deactivate access.
+Track subscription status (active, expired, pending) and payment history.
+
+
+Business Subscription:
+Businesses purchase a subscription plan to access the application.
+After payment, admin grants login credentials (username, password) for the business.
+Businesses can manage their subscription (view plan, renew, upgrade) via a dashboard.
+
+
+Payment Processing:
+Integrate a payment gateway (e.g., Stripe) for subscription payments.
+Store payment details (Transaction ID, Amount, Date, Status).
+Send payment confirmation emails to businesses.
+
+
+Access Control:
+Businesses access the application only with active subscriptions.
+Automatically block access if subscription expires or payment fails.
+
+
+
+3.7 User Management
+
+Roles:
+Super Admin: Manages subscriptions, assigns access to businesses, and has full application access.
+Business Admin: Manages users within their business (e.g., cashiers, inventory managers).
+Cashier: Access to POS and sales.
+Inventory Manager: Access to product and stock management.
+
+
+User Authentication:
+Secure login with username and password.
+Password recovery via email.
+
+
+Business User Management:
+Business admins can add/edit/delete users (cashiers, inventory managers) within their subscription limits (e.g., max 5 users for Basic plan).
+Track user activity (e.g., sales, stock updates) for auditing.
+
+
+
+3.8 Reporting and Analytics
+
+Generate reports for:
+Stock levels (current, low stock, out-of-stock).
+Expired/soon-to-expire products.
+Sales performance (daily, weekly, monthly, by product/category).
+Client credit balances and overdue payments.
+Subscription and payment history (admin-only).
+
+
+Export reports as PDF/CSV.
+Provide basic charts (e.g., sales trends, stock levels) in the dashboard.
+
+
+4. Non-Functional Requirements
+
+Performance:
+Handle up to 5,000 products, 500 clients, and 500 daily transactions efficiently (scaled down for 4-week timeline).
+Process barcode scans and API requests in under 2 seconds.
+
+
+Scalability:
+Support single-store and multi-branch setups (basic multi-branch support for future expansion).
+
+
+Usability:
+Intuitive interface for non-technical users (cashiers, business admins).
+Multilingual support (English, French, Arabic).
+Responsive design for desktop, tablet, and mobile.
+
+
+Reliability:
+Ensure data integrity for stock, sales, and subscription transactions.
+Implement daily backups.
+
+
+Security:
+Encrypt sensitive data (client details, passwords, payment info).
+Secure API endpoints with JWT authentication.
+Restrict subscription management to super admin.
+
+
+Compatibility:
+Compatible with modern browsers (Chrome, Firefox, Safari).
+Barcode scanning works with standard webcams/mobile cameras.
+Support EAN-13, UPC-A, and QR codes.
+
+
+
+
+5. Technical Specifications
+
+Technology Stack:
+Frontend: React.js with Tailwind CSS for responsive UI.
+Backend: Laravel (PHP) for RESTful API development.
+Database: MySQL (default with Laravel) for relational data.
+Barcode Scanning: QuaggaJS or ZXing for browser-based scanning.
+PDF Generation: Laravel PDF package (e.g., barryvdh/laravel-dompdf) for invoices/reports.
+Authentication: Laravel Sanctum for API token-based authentication.
+Payment Gateway: Stripe for subscription payments.
+Hosting: Deployable on cloud platforms (e.g., AWS, Heroku, or Laravel Forge).
+
+
+Database Schema (Key Tables):
+Products: ProductID, Name, Barcode (unique), Category, UnitPrice, CostPrice, Supplier, Description, ExpirationDate, Quantity, MinStockThreshold, BusinessID.
+Clients: ClientID, Name, Phone, Email, Address, CreditLimit, CreditBalance, BusinessID.
+Invoices: InvoiceID, Date, ClientID, Products (JSON or relational), TotalAmount, Taxes, PaymentMethod, PaymentStatus, BusinessID.
+Sales: SaleID, Date, ClientID, Products, TotalAmount, PaymentMethod, BusinessID.
+Users: UserID, Username, Password (hashed), Role, Email, BusinessID.
+Subscriptions: SubscriptionID, BusinessID, PlanID, StartDate, EndDate, Status, PaymentID.
+Plans: PlanID, Name, Price, Duration, MaxUsers, MaxProducts.
+Payments: PaymentID, BusinessID, Amount, TransactionID, Date, Status.
+
+
+External APIs:
+Stripe for subscription payments.
+Optional: Open Food Facts for product data (if feasible within timeline).
+
+
+Development Practices:
+Use Git for version control (GitHub repository).
+Follow Laravel and React best practices (e.g., modular components, RESTful APIs).
+Write unit tests for critical APIs (e.g., stock updates, payments).
+Document APIs using Laravel API documentation or Swagger.
+
+
+
+
+6. Deliverables
+
+Fully functional web application with all specified features.
+Source code with documentation (installation, configuration, API endpoints).
+User manual for super admin, business admins, cashiers, and inventory managers (English and French).
+Test cases for critical functionalities (barcode scanning, subscriptions, invoicing).
+Deployment guide for hosting on a cloud platform.
+Database schema and setup scripts.
+
+
+7. Project Timeline (4 Weeks)
+
+Week 1:
+Requirements analysis and UI/UX design (wireframes).
+Set up Laravel backend (project structure, database schema, authentication).
+Set up React frontend with Tailwind CSS.
+
+
+Week 2:
+Develop backend APIs for products, clients, and barcode scanning.
+Implement frontend for product/client management and POS with barcode scanning.
+
+
+Week 3:
+Develop subscription and payment management (backend and frontend).
+Implement invoicing, reporting, and user management.
+Integrate Stripe for payments and QuaggaJS for barcode scanning.
+
+
+Week 4:
+Comprehensive testing (unit, integration, user acceptance).
+Documentation (user manual, API docs, deployment guide).
+Deploy application and conduct final review.
+
+
+
+
+8. Constraints
+
+Complete the project in 4 weeks, prioritizing core features (barcode scanning, stock management, subscriptions, invoicing).
+Use open-source/free tools (e.g., QuaggaJS, MySQL, Laravel packages).
+Limit scope to essential features due to timeline (e.g., basic multi-branch support, no advanced analytics).
+
+
+9. Assumptions
+
+The intern has basic knowledge of React, Laravel, MySQL, and JavaScript.
+Development environment is available (VS Code, PHP, Node.js, MySQL).
+Webcam/mobile camera available for barcode scanning tests.
+Stripe account is provided for payment integration.
+Internet connectivity is available for cloud hosting and API integration.
+
+
+10. Acceptance Criteria
+
+Product Management:
+Add, update, delete products with barcode scanning.
+Expiration date and low stock alerts function correctly.
+
+
+Client Management:
+Manage clients with credit tracking and overdue notifications.
+
+
+Barcode Scanning:
+Scans retrieve product details for sales/creation in under 2 seconds.
+Handles errors (invalid barcodes, out-of-stock) appropriately.
+
+
+Invoicing:
+Generate and export invoices as PDF with accurate details.
+
+
+Sales:
+POS supports barcode scanning and manual entry.
+Sales history is filterable and exportable.
+
+
+Subscription Management:
+Super admin can manage plans and grant business access.
+Businesses can purchase subscriptions via Stripe and access the application.
+Access is blocked for expired subscriptions.
+
+
+Usability:
+Responsive, intuitive interface in English, French, and Arabic.
+
+
+Security:
+Secure authentication and data encryption.
+Subscription management restricted to super admin.
+
+
+Performance:
+Handles specified data volumes with scans/APIs under 2 seconds.
+
+
+
+
+11. Additional Notes
+
+Provide weekly progress updates to the supervisor.
+Test with real-world scenarios (e.g., supermarket products, pharmacy items).
+Ensure the subscription system is secure and user-friendly for businesses.
+Design for future scalability (e.g., multi-branch support, advanced reporting).
