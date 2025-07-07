@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import Login from './pages/auth/Login.jsx';
 import Dashboard from './pages/Dashboard.jsx';
+import Products from './pages/products/Index.jsx';
 import ProtectedRoute from './routes/ProtectedRoute.jsx';
 
 function App() {
@@ -10,8 +11,16 @@ function App() {
       <Route
         path="/dashboard"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute allowedRoles={['admin', 'business']}>
             <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/products"
+        element={
+          <ProtectedRoute allowedRoles={['business']}>
+            <Products />
           </ProtectedRoute>
         }
       />
