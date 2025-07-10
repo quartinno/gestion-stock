@@ -71,7 +71,7 @@ class CreateStockManagementTables extends Migration
             $table->index('payment_date', 'idx_payment_date');
         });
 
-        Schema::create('user', function (Blueprint $table) {
+        Schema::create('users', function (Blueprint $table) {
             $table->char('user_id', 36)->primary();
             $table->char('business_id', 36);
             $table->string('username')->unique();
