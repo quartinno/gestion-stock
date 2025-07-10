@@ -226,7 +226,29 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/suppliers"
+          element={
+            <ProtectedRoute allowedRoles={['business']}>
+              <div className="dashboard-container">
+                <button
+                  className="toggle-button"
+                  onClick={toggleSidebar}
+                  aria-label={isSidebarOpen ? 'Close sidebar' : 'Open sidebar'}
+                  style={{ display: window.innerWidth <= 768 ? 'block' : 'none' }}
+                >
+                  {isSidebarOpen ? '✕' : '☰'}
+                </button>
+                <Sidebar isOpen={isSidebarOpen} />
+                <div className="dashboard-content">
+                  {/* Add Suppliers component here */}
+                </div>
+              </div>
+            </ProtectedRoute>
+          }
+
         <Route path="/" element={<Login />} />
+        
       </Routes>
     </>
   );

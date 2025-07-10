@@ -19,6 +19,12 @@ function Sidebar({ isOpen }) {
         >
           Products
         </Link>
+        <Link
+          to="/suppliers"
+          className={`sidebar-link ${location.pathname === '/suppliers' ? 'active' : ''}`}
+        >
+          Suppliers
+        </Link>
       </div>
     </nav>
   );
