@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Business extends Model
 {
-    protected $table = 'businesses'; /
+    protected $table = 'businesses'; 
     protected $fillable = ['name', 'description', 'address']; // Add other fields as necessary
 
     public function products()
