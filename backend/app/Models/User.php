@@ -10,6 +10,8 @@ class User extends Authenticatable
 {
     use HasApiTokens, Notifiable;
 
+    protected $table = 'user';  // هنا خاصك تحدد اسم الجدول
+
     protected $fillable = [
         'name', 'email', 'password', 'role',
     ];

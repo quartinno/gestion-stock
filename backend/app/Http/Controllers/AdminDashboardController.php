@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
@@ -8,6 +9,9 @@ class AdminDashboardController extends Controller
 {
     public function index()
     {
+        $search = request('search');
+        $statusFilter = request('status');
+
         $totalBusinesses = DB::table('business')->count();
 
         $activePlans = DB::table('subscription')
@@ -27,7 +31,7 @@ class AdminDashboardController extends Controller
 
         $totalPlans = DB::table('plan')->count();
 
-        $businesses = DB::table('business')
+        $query = DB::table('business')
             ->leftJoin('subscription', 'business.business_id', '=', 'subscription.business_id')
             ->leftJoin('plan', 'subscription.plan_id', '=', 'plan.plan_id')
             ->select(
@@ -36,8 +40,20 @@ class AdminDashboardController extends Controller
                 'subscription.status',
                 'plan.name as plan',
                 'subscription.created_at as joined_date'
-            )
-            ->get();
+            );
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('business.name', 'like', "%$search%")
+                  ->orWhere('business.email', 'like', "%$search%");
+            });
+        }
+
+        if ($statusFilter) {
+            $query->where('subscription.status', $statusFilter);
+        }
+
+        $businesses = $query->get();
 
         return view('admin.dashboard', compact(
             'totalBusinesses',
