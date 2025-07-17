@@ -1,39 +1,33 @@
-import styles from './Image.module.css';
-import PropTypes from 'prop-types';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
-const Image = ({ src, alt, size = 'medium', caption, className, ...props }) => {
-  const [isError, setIsError] = useState(false);
+const Image = ({ 
+  src, 
+  alt, 
+  className = '', 
+  fallbackSrc = '/images/placeholder.svg',
+  loading = 'lazy',
+  ...props 
+}) => {
+  const [imgSrc, setImgSrc] = useState(src);
+  const [hasError, setHasError] = useState(false);
 
   const handleError = () => {
-    setIsError(true);
+    if (!hasError) {
+      setHasError(true);
+      setImgSrc(fallbackSrc);
+    }
   };
 
   return (
-    <div className={`${styles.imageContainer} ${styles[size]} ${className || ''}`}>
-      {isError ? (
-        <div className={styles.fallback}>Image not available</div>
-      ) : (
-        <img
-          src={src}
-          alt={alt}
-          className={styles.image}
-          loading="lazy"
-          onError={handleError}
-          {...props}
-        />
-      )}
-      {caption && <p className={styles.caption}>{caption}</p>}
-    </div>
+    <img
+      src={imgSrc}
+      alt={alt}
+      className={className}
+      loading={loading}
+      onError={handleError}
+      {...props}
+    />
   );
-};
-
-Image.propTypes = {
-  src: PropTypes.string.isRequired,
-  alt: PropTypes.string.isRequired,
-  size: PropTypes.oneOf(['small', 'medium', 'large']),
-  caption: PropTypes.string,
-  className: PropTypes.string,
 };
 
 export default Image;
