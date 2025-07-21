@@ -1,0 +1,63 @@
+.trusted-by-section {
+  padding: 40px 0;
+  text-align: center;
+  position: relative;
+  z-index: 10;
+  margin-top: 40px;
+}
+
+
+
+.trusted-by-title {
+  font-size: 18px;
+  color: #4b5563;
+  margin-bottom: 40px;
+}
+
+.logos-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 60px;
+}
+
+.partner-logo {
+  max-height: 55px; /* Increased logo size */
+  max-width: 180px;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.partner-logo:hover {
+  opacity: 1;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .logos-container {
+    gap: 40px;
+  }
+
+  .partner-logo {
+    max-height: 30px;
+  }
+
+
+}
+
+
+
+@media (max-width: 844px) {
+    .logos-container {
+        gap: 40px;
+      }
+    
+      .partner-logo {
+        max-height: 30px;
+      }
+
+    
+    }
+  
+

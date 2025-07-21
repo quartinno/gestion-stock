@@ -1,0 +1,183 @@
+/* Pricing Section Styles */
+.pricing-section {
+  padding: 60px 20px;
+  text-align: center;
+ 
+}
+
+.pricing-header h1 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: #007bff;
+  margin-bottom: 16px;
+}
+
+.pricing-header p {
+  font-size: 1.125rem;
+  color: #64748b;
+  margin-bottom: 32px;
+}
+
+.pricing-toggle .toggle-btn {
+  background-color: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 9999px;
+  padding: 10px 24px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pricing-toggle .toggle-btn.active {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
+.pricing-cards-container {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 60px;
+  flex-wrap: wrap;
+}
+
+.pricing-card {
+  background-color: #fff;
+  border: 1px solid #e0f2fe;
+  border-radius: 24px;
+  padding: 40px;
+  max-width: 400px;
+  text-align: left;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.pricing-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.pricing-card h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.pricing-card .plan-description {
+  color: #64748b;
+  min-height: 60px;
+  margin-bottom: 24px;
+}
+
+.price-container {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 24px;
+  margin-bottom: 24px;
+}
+
+.price-container .price {
+  font-size: 2.5rem;
+  font-weight: 700;
+  display: block;
+}
+
+.price-container .billing-cycle {
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+.pricing-card .btn {
+  width: 100%;
+  margin: 0 auto;
+  padding: 16px;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'QualionRound', 'Inter', system-ui, sans-serif;
+  text-decoration: none;
+  display: block;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.btn-join {
+  background-color: #fff;
+  border: 1px solid #e2e8f0;
+  color: #0f172a;
+}
+
+.btn-join:hover {
+  background-color: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.btn-subscribe {
+  background-color: #007bff;
+  border: 1px solid #007bff;
+  color: #fff;
+}
+
+.btn-subscribe:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+.features-list {
+  margin-top: 32px;
+}
+
+.features-list h4 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.features-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.features-list li {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  color: #334155;
+}
+
+.feature-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background-color: #3b82f6;
+  border-radius: 50%;
+  margin-right: 12px;
+  margin-top: 7px; /* Align with text */
+  flex-shrink: 0;
+}
+
+.sub-features {
+  margin-top: 8px;
+  margin-left: 20px;
+}
+
+.sub-features li {
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .pricing-cards-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .pricing-card {
+    max-width: 100%;
+  }
+}

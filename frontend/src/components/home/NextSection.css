@@ -1,0 +1,48 @@
+.next-section {
+  position: relative;
+  width: 100%;
+  min-height: 600px; /* Adjust based on your needs */
+  z-index: 2;
+  margin-top: -1px; /* To prevent any gap */
+}
+
+.next-section-content {
+  position: relative;
+  z-index: 3;
+  padding: 80px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.union-wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+.union-wave img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.next-section-placeholder {
+  text-align: center;
+  padding: 40px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  margin: 40px 0;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .next-section {
+    min-height: 500px;
+  }
+  
+  .next-section-content {
+    padding: 40px 15px;
+  }
+}

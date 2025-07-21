@@ -1,0 +1,60 @@
+/* Content sections container */
+.content-sections {
+  position: relative;
+  z-index: 2;
+  padding: 40px 0 0;
+}
+
+/* Overlay container */
+.overlay-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40%;
+  max-width: 500px;
+  z-index: 3; /* Lower than wave separator */
+  pointer-events: none;
+}
+
+/* Desktop Styles */
+.quantixa-overlay {
+  width: 100%;
+  height: auto;
+  transform: translateY(-25%);
+}
+
+/* Responsive Styles */
+/* Adjust spacing for the main content container */
+.relative.z-10 {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Ensure wave separator appears above overlay */
+.wave-separator-container {
+  margin-top: -1px;
+  position: absolute;
+  z-index: -5; /* Higher than overlay */
+  bottom: 200vh;
+}
+
+@media (max-width: 992px) {
+  .overlay-container {
+    width: 45%;
+  }
+  
+  .content-sections {
+    padding: 20px 0 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .overlay-container {
+    display: none;
+  }
+  
+  .content-sections {
+    padding: 0;
+  }
+}

@@ -1,0 +1,236 @@
+.checkout-page {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.checkout-main-content {
+  position: relative;
+  z-index: 10;
+  padding: 120px 20px 60px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.checkout-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.checkout-header h1 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: #007bff;
+  line-height: 1.2;
+}
+
+.checkout-header p {
+  font-size: 1.125rem;
+  color: #64748b;
+  margin-top: 16px;
+}
+
+.payment-method-selector {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.secure-payment-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 32px;
+  color: #64748b;
+}
+
+.secure-payment-info img {
+  width: 40px;
+  height: auto;
+}
+
+.btn-payment-method {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid #cbd5e1;
+  background-color: #fff;
+  transition: all 0.3s ease;
+  font-family: 'QualionRound', sans-serif;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-payment-method.active {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
+.checkout-body {
+  display: flex;
+  gap: 40px;
+}
+
+.payment-details-container {
+  flex: 2;
+}
+
+.payment-details-container h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.payment-details-container > form > p {
+  color: #64748b;
+  margin-bottom: 32px;
+}
+
+.form-row {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.expire-date-group {
+  flex: 2;
+}
+
+.cvc-group {
+  flex: 1;
+}
+
+.expire-date-inputs {
+  display: flex;
+  gap: 10px;
+}
+
+.expire-date-inputs select {
+  flex: 1;
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: white;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2364748B%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: .65em auto;
+  cursor: pointer;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.terms-agreement {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.custom-checkbox {
+  width: 24px;
+  height: 24px;
+  border: 2px solid #cbd5e1;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-checkbox.selected {
+  background-color: #16a34a;
+  border-color: #16a34a;
+}
+
+.btn-confirm {
+  width: 100%;
+  padding: 16px;
+  background-color: #e2e8f0;
+  color: #334155;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  margin-top: 24px;
+  font-family: 'QualionRound', sans-serif;
+}
+
+.paypal-info {
+  text-align: center;
+  padding: 40px;
+}
+
+.btn-paypal-main {
+  background-color: #007bff;
+  color: #fff;
+  padding: 16px 32px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-family: 'QualionRound', sans-serif;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+}
+
+.paypal-icon-btn {
+  width: 20px;
+  height: auto;
+}
+
+.subscription-summary-container {
+  flex: 1;
+}
+
+.checkout-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 60px;
+}
+
+.btn-previous, .btn-next {
+  padding: 12px 24px;
+  border-radius: 9999px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-family: 'QualionRound', sans-serif;
+}
+
+.btn-previous {
+  background-color: #e2e8f0;
+  color: #334155;
+}
+
+.btn-next {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.btn-next svg {
+  width: 20px;
+  height: 20px;
+}
+
+@media (max-width: 992px) {
+  .checkout-body {
+    flex-direction: column;
+  }
+}

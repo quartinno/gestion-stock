@@ -1,0 +1,52 @@
+/* Footer Section Styles */
+.footer-section {
+  position: relative;
+  z-index: 99;
+  padding: 60px 20px;
+}
+
+.footer-content {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Aligns items to the left within the centered container */
+  gap: 24px;
+}
+
+/* Logo styles copied from Header.css for consistency */
+.logo-container {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #0f172a;
+}
+
+.logo {
+  width: 40px;
+  height: 40px;
+  margin-right: 12px;
+}
+
+.logo-text {
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+/* Footer text styles */
+.footer-text {
+  text-align: left;
+}
+
+.footer-text .tagline {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 8px;
+}
+
+.footer-text .description {
+  font-size: 1rem;
+  color: #64748b;
+  line-height: 1.6;
+}

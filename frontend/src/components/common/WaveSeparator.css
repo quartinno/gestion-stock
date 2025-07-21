@@ -1,0 +1,27 @@
+.wave-separator-container {
+    width: 100vw;
+    line-height: 0;
+    margin-top: -1px;
+    position: absolute;
+    bottom: 50vh; /* Helps prevent any thin gaps */
+}
+
+.wave-svg {
+  width: 100%;
+  height: auto;
+  display: block; /* Removes bottom space under the image */
+}
+
+@media (max-width: 992px) {
+  .wave-separator-container {
+    /* Adjust position for tablets */
+    bottom: 30vh;
+  }
+}
+
+@media (max-width: 768px) {
+  .wave-separator-container {
+    /* Adjust position for mobile */
+    bottom: 15vh;
+  }
+}
