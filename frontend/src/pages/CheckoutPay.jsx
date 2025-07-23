@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import creditCardIcon from '../assets/images/Credit Card.svg';
-import paypalIcon from '../assets/images/PYPL.png';
+import React, { useState, useEffect } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { FaCreditCard, FaPaypal, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import { PayPalButtons } from '@paypal/react-paypal-js';
+import StripePaymentForm from '../components/payment/StripePaymentForm';
+import axios from 'axios';
 import Header from '../components/layout/Header';
 import Footer from '../components/common/Footer';
 import { plans } from '../data/plans';
@@ -9,20 +11,124 @@ import BlueBlob from '../assets/images/Blob Ornament blue.svg';
 import GreenBlob from '../assets/images/Blob Ornament green.svg';
 import './CheckoutPay.css';
 
+
+
 const CheckoutPay = () => {
   const { planId } = useParams();
   const plan = plans[planId];
-  const [paymentMethod, setPaymentMethod] = useState('card'); // 'card' or 'paypal'
-  const [agreed, setAgreed] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState('card');
+  const [paymentStatus, setPaymentStatus] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   if (!plan) {
-    return <div>Plan not found</div>;
+    return <div className="error-message">Plan not found</div>;
+  }
+
+  const handlePaymentSuccess = (paymentData) => {
+    setPaymentStatus('success');
+    setLoading(false);
+    // Redirect to success page or show success message
+    setTimeout(() => {
+      navigate(`/payment/success?payment_id=${paymentData.payment_intent_id || paymentData.paymentId}`);
+    }, 2000);
+  };
+
+  const handlePaymentError = (error) => {
+    console.error('Payment error:', error);
+    setError(error.message || 'An error occurred during payment processing');
+    setPaymentStatus('error');
+    setLoading(false);
+  };
+
+    const createPaypalOrder = (data, actions) => {
+    setLoading(true);
+    setError(null);
+    return axios.post(`/api/payment/paypal`, { plan_id: planId })
+      .then(response => {
+        setLoading(false);
+        return response.data.id;
+      })
+      .catch(error => {
+        console.error('Error creating PayPal payment', error);
+        setError('Could not initiate PayPal payment. Please try again.');
+        setLoading(false);
+        throw error;
+      });
+  };
+
+  const onPaypalApprove = (data, actions) => {
+    setLoading(true);
+    return axios.post(`/api/payment/paypal/success`, {
+      paymentId: data.orderID,
+      PayerID: data.payerID,
+      plan_id: planId,
+    })
+    .then(response => {
+        setLoading(false);
+        handlePaymentSuccess({ paymentId: data.orderID });
+    })
+    .catch(err => {
+        setLoading(false);
+        handlePaymentError(err);
+    });
+  };
+
+  const handleStripePaymentSuccess = (paymentIntent) => {
+    axios.post(`/api/payment/stripe/success`, {
+      payment_intent_id: paymentIntent.id,
+    })
+    .then(response => {
+      handlePaymentSuccess({ payment_intent_id: paymentIntent.id });
+    })
+    .catch(error => {
+      handlePaymentError(error);
+    });
+  };
+
+  if (paymentStatus === 'success') {
+    return (
+      <div className="checkout-page">
+        <Header />
+        <div className="success-container">
+          <FaCheckCircle className="success-icon" />
+          <h2>Payment Successful!</h2>
+          <p>Thank you for your purchase. Your subscription is now active.</p>
+          <Link to="/dashboard" className="btn btn-primary">Go to Dashboard</Link>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (paymentStatus === 'error') {
+    return (
+      <div className="checkout-page">
+        <Header />
+        <div className="error-container">
+          <FaTimesCircle className="error-icon" />
+          <h2>Payment Failed</h2>
+          <p>{error || 'An error occurred during payment processing.'}</p>
+          <button 
+            className="btn btn-primary" 
+            onClick={() => {
+              setPaymentStatus(null);
+              setError(null);
+            }}
+          >
+            Try Again
+          </button>
+        </div>
+        <Footer />
+      </div>
+    );
   }
 
   return (
     <div className="checkout-page">
       <Header />
-      <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: 'auto', zIndex: 0, transform: 'translateX(-20%)', overflow: 'hidden' }}>
+       <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: 'auto', zIndex: 0, transform: 'translateX(-20%)', overflow: 'hidden' }}>
         <img src={BlueBlob} alt="Blue Blob" style={{ display: 'block', width: '100%', height: 'auto' }} />
       </div>
       <div style={{ position: 'fixed', top: 0, right: 0, width: '100vw', height: 'auto', zIndex: 0, transform: 'translateX(20%)', overflow: 'hidden' }}>
@@ -30,83 +136,62 @@ const CheckoutPay = () => {
       </div>
 
       <main className="checkout-main-content">
-        <div className="checkout-header">
-          <h1>Enter Your Payment Details</h1>
-        </div>
-        <div className="secure-payment-info">
-          <p>Your payment is 100% secure and encrypted.</p>
-          <img src={creditCardIcon} alt="Secure Payment" />
-        </div>
         <div className="payment-method-selector">
-          <button 
-            className={`btn-payment-method ${paymentMethod === 'card' ? 'active' : ''}`}
-            onClick={() => setPaymentMethod('card')}
-          >
-            Credit/Debit Card
-          </button>
+          <div className="payment-method">
+            <input
+              type="radio"
+              id="stripe"
+              name="paymentMethod"
+              value="stripe"
+              checked={paymentMethod === 'stripe'}
+              onChange={() => setPaymentMethod('stripe')}
+              disabled={loading}
+            />
+            <label htmlFor="stripe">
+              <FaCreditCard /> Credit/Debit Card (Stripe)
+            </label>
+          </div>
           <button 
             className={`btn-payment-method ${paymentMethod === 'paypal' ? 'active' : ''}`}
             onClick={() => setPaymentMethod('paypal')}
           >
-            <img src={paypalIcon} alt="PayPal" className="paypal-icon-btn" />
-            PayPal
+            <FaPaypal /> PayPal
           </button>
         </div>
 
-
         <div className="checkout-body">
           <div className="payment-details-container">
-            {paymentMethod === 'card' ? (
-              <form>
+            {paymentMethod === 'stripe' ? (
+              <div>
                 <h2>Payment Detail</h2>
                 <p>Please fill out the form below. Enter your card account details.</p>
-                <div className="form-group">
-                  <label htmlFor="cardNumber">Card Number</label>
-                  <input type="text" id="cardNumber" placeholder="1243 - 2133 - 9832 - 3200" />
-                </div>
-                <div className="form-row">
-                  <div className="form-group expire-date-group">
-                    <label htmlFor="expMonth">Expire Date</label>
-                    <div className="expire-date-inputs">
-                      <select id="expMonth" defaultValue="">
-                        <option value="" disabled>Month</option>
-                        {Array.from({ length: 12 }, (_, i) => (
-                          <option key={i + 1} value={i + 1}>{String(i + 1).padStart(2, '0')}</option>
-                        ))}
-                      </select>
-                      <select id="expYear" defaultValue="">
-                        <option value="" disabled>Year</option>
-                        {Array.from({ length: 11 }, (_, i) => (
-                          <option key={i} value={new Date().getFullYear() + i}>{new Date().getFullYear() + i}</option>
-                        ))}
-                      </select>
-                    </div>
+                {loading && (
+                  <div className="loading-overlay">
+                    <div className="spinner"></div>
+                    <p>Processing your payment...</p>
                   </div>
-                  <div className="form-group cvc-group">
-                    <label htmlFor="cvc">CVC/CVV</label>
-                    <input type="text" id="cvc" placeholder="453" />
-                  </div>
-                </div>
-                <div className="form-group">
-                  <label htmlFor="fullName">Full Name</label>
-                  <input type="text" id="fullName" placeholder="Enter the name exactly as it appears on your payment card." />
-                </div>
-                <div className="form-group terms-agreement">
-                  <div className={`custom-checkbox ${agreed ? 'selected' : ''}`} onClick={() => setAgreed(!agreed)}>
-                    {agreed && <span className="checkmark">&#10003;</span>}
-                  </div>
-                  <label htmlFor="terms">I agree to the Terms and Privacy Policy</label>
-                </div>
-                <button type="submit" className="btn btn-confirm">Confirm</button>
-              </form>
+                )}
+                                <StripePaymentForm 
+                  amount={plan.price * 100} // Convert to cents for Stripe
+                  planId={planId}
+                  onSuccess={handleStripePaymentSuccess}
+                  onError={handlePaymentError}
+                  setLoading={setLoading}
+                />
+              </div>
             ) : (
-              <div className="paypal-info">
+              <div>
                 <h2>Pay with PayPal</h2>
-                <p>You will be redirected to PayPal to complete your purchase securely.</p>
-                <button className="btn-paypal-main">
-                  <img src={paypalIcon} alt="PayPal" className="paypal-icon-btn" />
-                  Pay With PayPal
-                </button>
+                <p>Click the button below to proceed with PayPal.</p>
+                <PayPalButtons 
+                  style={{ layout: 'vertical' }}
+                  createOrder={createPaypalOrder}
+                  onApprove={onPaypalApprove}
+                  onError={(err) => {
+                    console.error('PayPal Button Error:', err);
+                    alert('An error occurred with the PayPal button. Please try again.');
+                  }}
+                />
               </div>
             )}
           </div>
@@ -134,14 +219,8 @@ const CheckoutPay = () => {
 
         <div className="checkout-actions">
           <Link to={`/account-setup/${planId}`} className="btn btn-previous">Previous</Link>
-          <Link to="#" className="btn btn-next">
-            Next
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M12 16L16 12L12 8" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M8 12H16" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </Link>
+          {/* The Next button might need to be handled differently now, e.g., disabled until payment is complete */}
+          <Link to="#" className="btn btn-next">Next</Link>
         </div>
       </main>
       <Footer />

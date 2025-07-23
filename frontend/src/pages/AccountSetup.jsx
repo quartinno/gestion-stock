@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import Header from '../components/layout/Header';
 import Footer from '../components/common/Footer';
 import { plans } from '../data/plans';
@@ -8,9 +8,30 @@ import GreenBlob from '../assets/images/Blob Ornament green.svg';
 import './AccountSetup.css';
 
 const AccountSetup = () => {
-  const { planId } = useParams();
+    const { planId } = useParams();
+  const navigate = useNavigate();
   const plan = plans[planId];
-  const [selectedRole, setSelectedRole] = useState('Business Admin');
+    const [selectedRole, setSelectedRole] = useState('Business Admin');
+  const [formData, setFormData] = useState({
+    fullName: '',
+    email: '',
+    password: '',
+    phone: '',
+    username: '',
+  });
+
+    const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({ ...prev, [id]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Here you would typically send the data to your backend
+    console.log('Form Data Submitted:', { ...formData, role: selectedRole });
+    // For now, we'll just navigate to the checkout page
+    navigate(`/checkout/${planId}`);
+  };
 
   if (!plan) {
     return <div>Plan not found</div>;
@@ -32,30 +53,30 @@ const AccountSetup = () => {
           <p>Just a few details to personalize your access and dashboard.</p>
         </div>
 
-        <div className="account-setup-body">
-          <div className="account-form-container">
-            <h2>Complete Your Account Setup</h2>
-            <p>Please fill out the form below. Enter your information details.</p>
-            <form>
+        <form onSubmit={handleSubmit}>
+          <div className="account-setup-body">
+            <div className="account-form-container">
+              <h2>Complete Your Account Setup</h2>
+              <p>Please fill out the form below. Enter your information details.</p>
               <div className="form-group">
                 <label htmlFor="fullName">Full Name</label>
-                <input type="text" id="fullName" placeholder="John Doe" />
+                <input type="text" id="fullName" placeholder="John Doe" value={formData.fullName} onChange={handleChange} />
               </div>
               <div className="form-group">
                 <label htmlFor="email">Email Address</label>
-                <input type="email" id="email" placeholder="Enter Your Email" />
+                <input type="email" id="email" placeholder="Enter Your Email" value={formData.email} onChange={handleChange} />
               </div>
               <div className="form-group">
                 <label htmlFor="password">Create Password</label>
-                <input type="password" id="password" placeholder="Create Your Password" />
+                <input type="password" id="password" placeholder="Create Your Password" value={formData.password} onChange={handleChange} />
               </div>
               <div className="form-group">
                 <label htmlFor="phone">Phone Number</label>
-                <input type="tel" id="phone" placeholder="+212-XXX-XXX-XXX" />
+                <input type="tel" id="phone" placeholder="+212-XXX-XXX-XXX" value={formData.phone} onChange={handleChange} />
               </div>
               <div className="form-group">
                 <label htmlFor="username">Enter Your Username</label>
-                <input type="text" id="username" placeholder="Username" />
+                <input type="text" id="username" placeholder="Username" value={formData.username} onChange={handleChange} />
               </div>
               <div className="form-group">
                 <label>Choose Your Role</label>
@@ -70,34 +91,34 @@ const AccountSetup = () => {
                   ))}
                 </div>
               </div>
-            </form>
-          </div>
+            </div>
 
-          <div className="plan-summary-container">
-            <h3>Plan Selected</h3>
-            <div className="selected-plan-card">
-              <h4>{plan.name}</h4>
-              <p className="plan-description">{plan.description}</p>
-              <div className="price-container">
-                <span className="price">{`${(plan.price * 9.05).toFixed(2)} د.م./month`}</span>
-                <span className="billing-cycle">User will be billed Monthly</span>
-              </div>
-              <div className="features-list">
-                <h5>What you get</h5>
-                <ul>
-                  {plan.features.map((feature, index) => (
-                    <li key={index}><span className="feature-dot"></span>{feature}</li>
-                  ))}
-                </ul>
+            <div className="plan-summary-container">
+              <h3>Plan Selected</h3>
+              <div className="selected-plan-card">
+                <h4>{plan.name}</h4>
+                <p className="plan-description">{plan.description}</p>
+                <div className="price-container">
+                  <span className="price">{`${(plan.price * 9.05).toFixed(2)} د.م./month`}</span>
+                  <span className="billing-cycle">User will be billed Monthly</span>
+                </div>
+                <div className="features-list">
+                  <h5>What you get</h5>
+                  <ul>
+                    {plan.features.map((feature, index) => (
+                      <li key={index}><span className="feature-dot"></span>{feature}</li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="account-setup-actions">
-          <Link to={`/select-plan/${planId}`} className="btn btn-previous">Previous</Link>
-          <Link to={`/checkout/${planId}`} className="btn btn-proceed">Proceed to Checkout</Link>
-        </div>
+          <div className="account-setup-actions">
+            <Link to={`/select-plan/${planId}`} className="btn btn-previous">Previous</Link>
+            <button type="submit" className="btn btn-proceed">Proceed to Checkout</button>
+          </div>
+        </form>
       </main>
       <Footer />
     </div>
