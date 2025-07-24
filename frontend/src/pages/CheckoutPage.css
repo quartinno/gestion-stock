@@ -1,7 +1,7 @@
 /* CSS for the new Checkout Page */
 
 .checkout-container {
-  background-color: #f0f8ff; /* Light blue background */
+  background-color: transparent;
   min-height: 100vh;
   padding: 4rem 2rem;
   display: flex;
@@ -57,10 +57,10 @@
 }
 
 .payment-details {
-  background-color: white;
+  background-color: transparent;
   padding: 2rem;
   border-radius: 1rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  /* box-shadow: 0 4px 12px rgba(0,0,0,0.05); */
 }
 
 .payment-details h2 {
@@ -123,10 +123,10 @@
 }
 
 .subscription-summary {
-  background-color: white;
+  background-color: transparent;
   padding: 2rem;
   border-radius: 1rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  /* box-shadow: 0 4px 12px rgba(0,0,0,0.05); */
   border: 2px solid #007AFF;
   align-self: flex-start;
 }

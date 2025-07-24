@@ -15,7 +15,17 @@ use App\Http\Controllers\PaymentController;
 |
 */
 
-Route::middleware('auth:sanctum')->prefix('payment')->group(function () {
+use App\Http\Controllers\AuthController;
+
+// Public authentication routes
+Route::post('/auth/login', [AuthController::class, 'login']);
+
+// Protected routes
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/auth/logout', [AuthController::class, 'logout']);
+    Route::get('/auth/user', [AuthController::class, 'user']);
+
+    Route::prefix('payment')->group(function () {
     // Stripe Payment Routes
     Route::post('/stripe/create-payment-intent', [PaymentController::class, 'createStripePaymentIntent']);
     Route::post('/stripe/success', [PaymentController::class, 'handleSuccessfulPayment']);
@@ -23,4 +33,5 @@ Route::middleware('auth:sanctum')->prefix('payment')->group(function () {
     // PayPal Payment Routes
     Route::post('/paypal', [PaymentController::class, 'paypalPayment']);
     Route::post('/paypal/success', [PaymentController::class, 'paypalSuccess']);
+    });
 });

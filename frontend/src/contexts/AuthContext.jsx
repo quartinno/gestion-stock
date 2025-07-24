@@ -6,38 +6,25 @@ const AuthContext = createContext();
 
 
 export const AuthProvider = ({ children }) => {
-    useEffect(() => {
-        const getCsrfToken = async () => {
-            try {
-                await axiosInstance.get('http://localhost:8000/sanctum/csrf-cookie');
-                console.log('CSRF cookie set');
-            } catch (error) {
-                console.error('Failed to fetch CSRF token:', error);
-            }
-        };
-        getCsrfToken();
-    }, []);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // This effect runs once on app load to fetch the CSRF cookie and check for an existing session.
   useEffect(() => {
     const initAuth = async () => {
       try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          setLoading(false);
-          return;
-        }
+        // Step 1: Get the CSRF cookie. This is essential for all subsequent POST requests.
+        await axiosInstance.get('http://localhost:8000/sanctum/csrf-cookie');
         
-        axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        
+        // Step 2: Check if a user session already exists.
         const response = await axiosInstance.get('/auth/user');
         setUser(response.data);
       } catch (err) {
-        console.error('Authentication error:', err);
-        localStorage.removeItem('token');
-        delete axiosInstance.defaults.headers.common['Authorization'];
+        // A 401 error here is normal if the user is not logged in. We only log other errors.
+        if (err.response?.status !== 401) {
+          console.error('Initialization error:', err);
+        }
       } finally {
         setLoading(false);
       }
@@ -48,17 +35,13 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (credentials) => {
     setLoading(true);
+    setError(null);
     try {
-
-
+      // After getting the CSRF cookie on load, we can now log in.
+      // Laravel will handle the session cookie automatically.
       const response = await axiosInstance.post('/auth/login', credentials);
-      const { token, user } = response.data;
-      
-      localStorage.setItem('token', token);
-      axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      
-      setUser(user);
-      return user;
+      setUser(response.data);
+      return response.data;
     } catch (err) {
       console.error('Login error:', err);
       setError(err.response?.data?.message || 'Login failed');
@@ -71,12 +54,12 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     setLoading(true);
     try {
+      // This will invalidate the session on the backend.
       await axiosInstance.post('/auth/logout');
     } catch (err) {
       console.error('Logout error:', err);
     } finally {
-      localStorage.removeItem('token');
-      delete axiosInstance.defaults.headers.common['Authorization'];
+      // Clear the user state on the frontend.
       setUser(null);
       setLoading(false);
     }
