@@ -122,7 +122,7 @@ class PaymentController extends Controller
         }
     }
 
-    public function paypalPayment(Request $request)
+    public function createPayPalOrder(Request $request)
     {
         $request->validate([
             'plan_id' => 'required|exists:plan,plan_id',
@@ -141,18 +141,20 @@ class PaymentController extends Controller
             ->setDescription($plan->name . ' Subscription')
             ->setInvoiceNumber(uniqid());
 
+        // Note: The react-paypal-js SDK expects redirect URLs, even for the API flow.
         $redirectUrls = new RedirectUrls();
-        $redirectUrls->setReturnUrl(config('app.frontend_url') . '/payment/paypal/success')
-            ->setCancelUrl(config('app.frontend_url') . '/payment/paypal/cancel');
+        $redirectUrls->setReturnUrl(config('app.frontend_url') . '/checkout?paypal_success=true')
+                     ->setCancelUrl(config('app.frontend_url') . '/checkout?paypal_cancel=true');
 
         $payment = new PayPalPayment();
-        $payment->setIntent('sale')
+        $payment->setIntent('sale') // Use 'sale' for immediate capture
             ->setPayer($payer)
             ->setRedirectUrls($redirectUrls)
             ->setTransactions([$transaction]);
 
         try {
             $payment->create($this->paypalApiContext);
+            // The JS SDK needs the payment ID from the v1/payments API
             return response()->json(['id' => $payment->getId()]);
         } catch (\Exception $e) {
             Log::error('PayPal Payment Creation Failed: ' . $e->getMessage());
@@ -160,19 +162,20 @@ class PaymentController extends Controller
         }
     }
 
-    public function paypalSuccess(Request $request)
+    public function capturePayPalOrder(Request $request)
     {
         $request->validate([
-            'paymentId' => 'required|string',
-            'PayerID' => 'required|string',
+            'orderID' => 'required|string', // This is the paymentId from v1 API
+            'payerID' => 'required|string',
             'plan_id' => 'required|exists:plan,plan_id',
         ]);
 
         DB::beginTransaction();
         try {
-            $payment = PayPalPayment::get($request->paymentId, $this->paypalApiContext);
+            $payment = PayPalPayment::get($request->orderID, $this->paypalApiContext);
+            
             $execution = new PaymentExecution();
-            $execution->setPayerId($request->PayerID);
+            $execution->setPayerId($request->payerID);
 
             $result = $payment->execute($execution, $this->paypalApiContext);
 
@@ -192,7 +195,7 @@ class PaymentController extends Controller
             // Create Subscription
             $subscription = Subscription::create([
                 'subscription_id' => Str::uuid(),
-                'business_id' => $user->business_id,
+                'business_id' => $user->business_id, // Ensure user has business_id
                 'plan_id' => $plan->plan_id,
                 'start_date' => Carbon::now(),
                 'end_date' => Carbon::now()->addMonths($plan->duration),
@@ -216,7 +219,7 @@ class PaymentController extends Controller
             return response()->json(['success' => true, 'message' => 'PayPal payment successful and subscription activated.']);
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('PayPal Success Handling Failed: ' . $e->getMessage());
+            Log::error('PayPal Capture Failed: ' . $e->getMessage());
             return response()->json(['error' => 'An error occurred while processing your PayPal payment.'], 500);
         }
     }

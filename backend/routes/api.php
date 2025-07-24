@@ -26,12 +26,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/auth/user', [AuthController::class, 'user']);
 
     Route::prefix('payment')->group(function () {
-    // Stripe Payment Routes
-    Route::post('/stripe/create-payment-intent', [PaymentController::class, 'createStripePaymentIntent']);
-    Route::post('/stripe/success', [PaymentController::class, 'handleSuccessfulPayment']);
+        // Stripe Payment Routes
+        Route::post('/stripe/create-payment-intent', [PaymentController::class, 'createStripePaymentIntent']);
+        Route::post('/stripe/success', [PaymentController::class, 'handleSuccessfulPayment']);
 
-    // PayPal Payment Routes
-    Route::post('/paypal', [PaymentController::class, 'paypalPayment']);
-    Route::post('/paypal/success', [PaymentController::class, 'paypalSuccess']);
+        // PayPal Payment Routes
+        Route::post('/paypal/create-order', [PaymentController::class, 'createPayPalOrder']);
+        Route::post('/paypal/capture-order', [PaymentController::class, 'capturePayPalOrder']);
     });
 });
