@@ -1,0 +1,201 @@
+/* CSS for the new Checkout Page */
+
+.checkout-container {
+  background-color: #f0f8ff; /* Light blue background */
+  min-height: 100vh;
+  padding: 4rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.checkout-header h1 {
+  font-size: 3.5rem;
+  font-weight: bold;
+  color: #007AFF;
+  margin-bottom: 0.5rem;
+}
+
+.checkout-header p {
+  color: #555;
+  margin-bottom: 2rem;
+}
+
+.payment-toggle {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.toggle-btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px; /* pill shape */
+  border: 1px solid #ddd;
+  background-color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.toggle-btn.active {
+  background-color: #007AFF;
+  color: white;
+  border-color: #007AFF;
+}
+
+.checkout-body {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.payment-details {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.payment-details h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.payment-details p {
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  transition: border-color 0.3s ease;
+}
+
+.form-input:focus {
+  border-color: #007AFF;
+  outline: none;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.terms-agreement {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.5rem 0;
+}
+
+.confirm-btn {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: #e0e0e0;
+  color: #888;
+  font-weight: 600;
+  text-align: center;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.subscription-summary {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  border: 2px solid #007AFF;
+  align-self: flex-start;
+}
+
+.subscription-summary h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #007AFF;
+  margin-bottom: 1.5rem;
+}
+
+.plan-details h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.plan-details .price {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 1rem 0 0.5rem;
+}
+
+.plan-details .billing-cycle {
+  color: #666;
+  font-size: 0.875rem;
+  margin-bottom: 1.5rem;
+}
+
+.features h4 {
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.features ul {
+  list-style: none;
+  padding: 0;
+}
+
+.features li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.checkout-nav {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  margin-top: 2rem;
+}
+
+.nav-btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  border: 1px solid #007AFF;
+  background-color: transparent;
+  color: #007AFF;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+}
+
+.nav-btn.next {
+  background-color: #007AFF;
+  color: white;
+}

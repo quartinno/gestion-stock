@@ -1,53 +1,61 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import axios from 'axios';
+import axiosInstance from '../api/axios';
 
 const AuthContext = createContext();
 
+
+
 export const AuthProvider = ({ children }) => {
+    useEffect(() => {
+        const getCsrfToken = async () => {
+            try {
+                await axiosInstance.get('http://localhost:8000/sanctum/csrf-cookie');
+                console.log('CSRF cookie set');
+            } catch (error) {
+                console.error('Failed to fetch CSRF token:', error);
+            }
+        };
+        getCsrfToken();
+    }, []);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 
   useEffect(() => {
     const initAuth = async () => {
       try {
         const token = localStorage.getItem('token');
-        
         if (!token) {
           setLoading(false);
           return;
         }
         
-        // Set default Authorization header
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         
-        const response = await axios.get(`${API_URL}/auth/user`);
+        const response = await axiosInstance.get('/auth/user');
         setUser(response.data);
       } catch (err) {
         console.error('Authentication error:', err);
         localStorage.removeItem('token');
-        delete axios.defaults.headers.common['Authorization'];
+        delete axiosInstance.defaults.headers.common['Authorization'];
       } finally {
         setLoading(false);
       }
     };
 
     initAuth();
-  }, [API_URL]);
+  }, []);
 
   const login = async (credentials) => {
     setLoading(true);
     try {
-      const response = await axios.post(`${API_URL}/auth/login`, credentials);
+
+
+      const response = await axiosInstance.post('/auth/login', credentials);
       const { token, user } = response.data;
       
-      // Store token in localStorage
       localStorage.setItem('token', token);
-      
-      // Set default Authorization header for all requests
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       
       setUser(user);
       return user;
@@ -63,16 +71,12 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     setLoading(true);
     try {
-      await axios.post(`${API_URL}/auth/logout`);
+      await axiosInstance.post('/auth/logout');
     } catch (err) {
       console.error('Logout error:', err);
     } finally {
-      // Remove token from localStorage
       localStorage.removeItem('token');
-      
-      // Remove Authorization header
-      delete axios.defaults.headers.common['Authorization'];
-      
+      delete axiosInstance.defaults.headers.common['Authorization'];
       setUser(null);
       setLoading(false);
     }
